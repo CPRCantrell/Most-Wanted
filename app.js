@@ -226,7 +226,10 @@ function findPersonDescendants(searchedPerson, people){
 // might want a display family method
 function displayPeople(displayTitle, peopleToDisplay) {
     let formatedPeopleDisplayText
-    if(peopleToDisplay[0].hasOwnProperty("relationship")){
+    if(peopleToDisplay == []){
+        formatedPeopleDisplayText = "None"
+    }
+    else if(peopleToDisplay[0].hasOwnProperty("relationship")){
         formatedPeopleDisplayText = peopleToDisplay.map(person => `${person.relationship}: ${person.firstName} ${person.lastName}`).join('\n');
     }else{
         formatedPeopleDisplayText = peopleToDisplay.map(person => `${person.firstName} ${person.lastName}`).join('\n');
