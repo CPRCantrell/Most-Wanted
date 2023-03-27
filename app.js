@@ -76,9 +76,8 @@ function mainMenu(person, people) {
             displayPersonInfo(person);
             break;
         case "family":
-            //! TODO
-            // let personFamily = findPersonFamily(person, people);
-            // displayPeople('Family', personFamily);
+            debugger
+            displayPeople('Family', findPersonFamily(person, people));
             break;
         case "descendants":
             //! TODO
@@ -99,6 +98,21 @@ function displayPersonInfo(person){
     alert(personInfo)
 }
 
+function findPersonFamily(searchedPerson, people){
+    let family=people.filter(person=>{
+        if(searchedPerson.currentSpouse==person.id){
+            return true
+        }
+        else if(person.parents.includes(searchedPerson.id)){
+            return true
+        }
+        else{
+            return false
+        }
+    })
+    return family
+}
+// might want a display family method
 function displayPeople(displayTitle, peopleToDisplay) {
     const formatedPeopleDisplayText = peopleToDisplay.map(person => `${person.firstName} ${person.lastName}`).join('\n');
     alert(`${displayTitle}\n\n${formatedPeopleDisplayText}`);
