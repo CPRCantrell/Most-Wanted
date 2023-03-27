@@ -76,13 +76,10 @@ function mainMenu(person, people) {
             displayPersonInfo(person);
             break;
         case "family":
-            debugger
             displayPeople('Family', findPersonFamily(person, people));
             break;
         case "descendants":
-            //! TODO
-            // let personDescendants = findPersonDescendants(person, people);
-            // displayPeople('Descendants', personDescendants);
+            displayPeople('Descendants', findPersonDescendants(person, people));
             break;
         case "quit":
             return;
@@ -112,6 +109,21 @@ function findPersonFamily(searchedPerson, people){
     })
     return family
 }
+
+function findPersonDescendants(searchedPerson, people){
+    let descendants = people.filter(person => person.parents.includes(searchedPerson.id))
+    let iterateAmount = descendants.length
+    for(let i=0; i<iterateAmount; i++){
+        let children = findPersonDescendants(descendants[i], people)
+        if(children.length != 0){
+            for(let child of children){
+                descendants.push(child)
+            }
+        }
+    }
+    return descendants
+}
+
 // might want a display family method
 function displayPeople(displayTitle, peopleToDisplay) {
     const formatedPeopleDisplayText = peopleToDisplay.map(person => `${person.firstName} ${person.lastName}`).join('\n');
