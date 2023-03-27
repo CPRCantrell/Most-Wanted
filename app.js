@@ -89,6 +89,7 @@ function searchByTraits(people){
     let ans=people.filter(person=>person[userAns]==userSelect)
     return ans
 }
+
 function mainMenu(person, people) {
 
     const mainMenuUserActionChoice = validatedPrompt(
@@ -121,16 +122,43 @@ function displayPersonInfo(person){
     alert(personInfo)
 }
 
+// function findPersonFamily(searchedPerson, people){
+//     let family=people.filter(person=>{
+//         if(searchedPerson.currentSpouse==person.id){
+//             return true
+//         }
+//         else if(person.parents.includes(searchedPerson.id)){
+//             return true
+//         }
+//         else{
+//             return false
+//         }
+//     })
+//     return family
+// }
+
 function findPersonFamily(searchedPerson, people){
     let family=people.filter(person=>{
         if(searchedPerson.currentSpouse==person.id){
+            person.relationship = "Spouse"
             return true
         }
         else if(person.parents.includes(searchedPerson.id)){
+            person.relationship = "Child"
             return true
         }
-        else{
-            return false
+        else if(searchedPerson.parents.includes(person.id)){
+            person.relationship = "Parent"
+            return true
+        } else if(searchedPerson.parents.length>0){
+            for(let parent in searchedPerson.parents){
+                for(let matchParent in person.parents){
+                    if(searchedPerson.parents[parent] == person.parents[matchParent] && searchedPerson.id != person.id){
+                        person.relationship = "siblings"
+                        return true
+                    }
+                }
+            }
         }
     })
     return family
@@ -152,7 +180,12 @@ function findPersonDescendants(searchedPerson, people){
 
 // might want a display family method
 function displayPeople(displayTitle, peopleToDisplay) {
-    const formatedPeopleDisplayText = peopleToDisplay.map(person => `${person.firstName} ${person.lastName}`).join('\n');
+    let formatedPeopleDisplayText
+    if(peopleToDisplay[0].hasOwnProperty("relationship")){
+        formatedPeopleDisplayText = peopleToDisplay.map(person => `${person.relationship}: ${person.firstName} ${person.lastName}`).join('\n');
+    }else{
+        formatedPeopleDisplayText = peopleToDisplay.map(person => `${person.firstName} ${person.lastName}`).join('\n');
+    }
     alert(`${displayTitle}\n\n${formatedPeopleDisplayText}`);
 }
 
