@@ -65,32 +65,6 @@ function searchByName(people) {
     return fullNameSearchResults;
 }
 
-// function searchByTraits(people){
-//     let acceptableAnswers=["gender","date of birth","height","weight","eyeColor","occupation", "done"]
-//     let userAns=validatedPrompt("What trait do you want to filter by?",acceptableAnswers)
-//     switch(userAns){
-//         case "eyecolor":
-//             userAns="eyeColor"
-//             break
-//         case "date of birth":
-//             userAns="dob"
-//             break
-//         default:
-//             break
-//     }
-//     let options=people.map(person=>person[userAns])
-//     let emptyArray=[]
-//     options=options.filter(op=>{
-//         if(!emptyArray.includes(op)){
-//             emptyArray.push(op)
-//             return true
-//         }
-//     })
-//     let userSelect=validatedPrompt("What filter do you want?",options)
-//     let ans=people.filter(person=>person[userAns]==userSelect)
-//     return ans
-// }
-
 function searchByTraits(people, acceptableAnswers){
     let userAns=validatedPrompt(`Current list contains: ${people.length}\nWhat trait do you want to filter by?`,acceptableAnswers)
 
@@ -149,20 +123,6 @@ function displayPersonInfo(person){
     alert(personInfo)
 }
 
-// function findPersonFamily(searchedPerson, people){
-//     let family=people.filter(person=>{
-//         if(searchedPerson.currentSpouse==person.id){
-//             return true
-//         }
-//         else if(person.parents.includes(searchedPerson.id)){
-//             return true
-//         }
-//         else{
-//             return false
-//         }
-//     })
-//     return family
-// }
 
 function findPersonFamily(searchedPerson, people){
     let family=people.filter(person=>{
@@ -191,19 +151,6 @@ function findPersonFamily(searchedPerson, people){
     return family
 }
 
-// function findPersonDescendants(searchedPerson, people){
-//     let descendants = people.filter(person => person.parents.includes(searchedPerson.id))
-//     let iterateAmount = descendants.length
-//     for(let i=0; i<iterateAmount; i++){
-//         let children = findPersonDescendants(descendants[i], people)
-//         if(children.length != 0){
-//             for(let child of children){
-//                 descendants.push(child)
-//             }
-//         }
-//     }
-//     return descendants
-// }
 function findPersonDescendants(searchedPerson, people){
     let laterDescendants=[]
     let descendants = people.filter(person => {
@@ -223,7 +170,6 @@ function findPersonDescendants(searchedPerson, people){
     return descendants
 }
 
-// might want a display family method
 function displayPeople(displayTitle, peopleToDisplay) {
     let formatedPeopleDisplayText
     if(peopleToDisplay == []){
