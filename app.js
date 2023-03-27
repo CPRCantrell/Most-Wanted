@@ -1,5 +1,7 @@
+var peopleList
 
 function app(people) {
+    peopleList = people
     displayWelcome();
     runSearchAndMenu(people);
     return exitOrRestart(people);
@@ -40,8 +42,7 @@ function searchPeopleDataSet(people) {
             results = searchByName(people);
             break;
         case 'traits':
-            debugger
-            results = searchByTraits(people);
+            results = searchByTraits(people, ["gender","date of birth","height","weight","eyeColor","occupation", "done", "restart"]);
             break;
         default:
             return searchPeopleDataSet(people);
@@ -64,30 +65,57 @@ function searchByName(people) {
     return fullNameSearchResults;
 }
 
-function searchByTraits(people){
-    let acceptableAnswers=["gender","date of birth","height","weight","eyeColor","occupation"]
-    let userAns=validatedPrompt("What trait do you want to filter by?",acceptableAnswers)
-    switch(userAns){
-        case "eyecolor":
-            userAns="eyeColor"
-            break
-        case "date of birth":
-            userAns="dob"
-            break
-        default:
-            break
-    }
-    let options=people.map(person=>person[userAns])
-    let emptyArray=[]
-    options=options.filter(op=>{
-        if(!emptyArray.includes(op)){
-            emptyArray.push(op)
-            return true
+// function searchByTraits(people){
+//     let acceptableAnswers=["gender","date of birth","height","weight","eyeColor","occupation", "done"]
+//     let userAns=validatedPrompt("What trait do you want to filter by?",acceptableAnswers)
+//     switch(userAns){
+//         case "eyecolor":
+//             userAns="eyeColor"
+//             break
+//         case "date of birth":
+//             userAns="dob"
+//             break
+//         default:
+//             break
+//     }
+//     let options=people.map(person=>person[userAns])
+//     let emptyArray=[]
+//     options=options.filter(op=>{
+//         if(!emptyArray.includes(op)){
+//             emptyArray.push(op)
+//             return true
+//         }
+//     })
+//     let userSelect=validatedPrompt("What filter do you want?",options)
+//     let ans=people.filter(person=>person[userAns]==userSelect)
+//     return ans
+// }
+
+function searchByTraits(people, acceptableAnswers){
+    let userAns=validatedPrompt(`Current list contains: ${people.length}\nWhat trait do you want to filter by?`,acceptableAnswers)
+
+    if(userAns == "done"){
+        return people
+    }else if(userAns == "restart"){
+        return searchByTraits(peopleList,["gender","date of birth","height","weight","eyeColor","occupation", "done", "restart"])
+    }else{
+        switch(userAns){
+            case "eyecolor":
+                userAns="eyeColor"
+                break
+            case "date of birth":
+                userAns="dob"
+                break
+            default:
+                break
         }
-    })
-    let userSelect=validatedPrompt("What filter do you want?",options)
-    let ans=people.filter(person=>person[userAns]==userSelect)
-    return ans
+
+        let options=people.map(person=>person[userAns]).filter(function(value,index,filterMappedArray){return filterMappedArray.indexOf(value) === index})
+        let userSelect=validatedPrompt("What filter do you want?",options)
+
+        delete acceptableAnswers[acceptableAnswers.indexOf(userAns)]
+        return searchByTraits(people.filter(person=>person[userAns]==userSelect), acceptableAnswers)
+    }
 }
 
 function mainMenu(person, people) {
@@ -184,14 +212,14 @@ function findPersonDescendants(searchedPerson, people){
             laterDescendants=findPersonDescendants(person,people)
             return true
         }})
-    
+
     if(laterDescendants.length>0){
         for(person in laterDescendants){
             laterDescendants[person].relationship="Grand"+laterDescendants[person].relationship
         }
         descendants=descendants.concat(laterDescendants)
     }
-    
+
     return descendants
 }
 
@@ -207,14 +235,21 @@ function displayPeople(displayTitle, peopleToDisplay) {
 }
 
 function validatedPrompt(message, acceptableAnswers) {
-    acceptableAnswers = acceptableAnswers.map(aa => aa.toLowerCase());
+    acceptableAnswers = acceptableAnswers.map(aa => {
+        if(typeof aa == "string"){
+            return aa.toLowerCase()
+        }else{
+            return aa
+        }
+    });
 
     const builtPromptWithAcceptableAnswers = `${message} \nAcceptable Answers: ${acceptableAnswers.map(aa => `\n-> ${aa}`).join('')}`;
 
     const userResponse = prompt(builtPromptWithAcceptableAnswers).toLowerCase();
+    let selectedAnswer = acceptableAnswers.filter(aa => userResponse == aa)
 
-    if (acceptableAnswers.includes(userResponse)) {
-        return userResponse;
+    if (selectedAnswer.length == 1) {
+        return selectedAnswer[0];
     }
     else {
         alert(`"${userResponse}" is not an acceptable response. The acceptable responses include:\n${acceptableAnswers.map(aa => `\n-> ${aa}`).join('')} \n\nPlease try again.`);
