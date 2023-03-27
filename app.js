@@ -105,7 +105,6 @@ function mainMenu(person, people) {
             displayPeople('Family', findPersonFamily(person, people));
             break;
         case "descendants":
-            debugger
             displayPeople('Descendants', findPersonDescendants(person, people));
             break;
         case "quit":
@@ -164,17 +163,35 @@ function findPersonFamily(searchedPerson, people){
     return family
 }
 
+// function findPersonDescendants(searchedPerson, people){
+//     let descendants = people.filter(person => person.parents.includes(searchedPerson.id))
+//     let iterateAmount = descendants.length
+//     for(let i=0; i<iterateAmount; i++){
+//         let children = findPersonDescendants(descendants[i], people)
+//         if(children.length != 0){
+//             for(let child of children){
+//                 descendants.push(child)
+//             }
+//         }
+//     }
+//     return descendants
+// }
 function findPersonDescendants(searchedPerson, people){
-    let descendants = people.filter(person => person.parents.includes(searchedPerson.id))
-    let iterateAmount = descendants.length
-    for(let i=0; i<iterateAmount; i++){
-        let children = findPersonDescendants(descendants[i], people)
-        if(children.length != 0){
-            for(let child of children){
-                descendants.push(child)
-            }
+    let laterDescendants=[]
+    let descendants = people.filter(person => {
+        if(person.parents.includes(searchedPerson.id)){
+            person.relationship="child"
+            laterDescendants=findPersonDescendants(person,people)
+            return true
+        }})
+    
+    if(laterDescendants.length>0){
+        for(person in laterDescendants){
+            laterDescendants[person].relationship="Grand"+laterDescendants[person].relationship
         }
+        descendants=descendants.concat(laterDescendants)
     }
+    
     return descendants
 }
 
