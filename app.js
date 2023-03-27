@@ -73,8 +73,7 @@ function mainMenu(person, people) {
 
     switch (mainMenuUserActionChoice) {
         case "info":
-            //! TODO
-            // displayPersonInfo(person);
+            displayPersonInfo(person);
             break;
         case "family":
             //! TODO
@@ -93,6 +92,11 @@ function mainMenu(person, people) {
     }
 
     return mainMenu(person, people);
+}
+
+function displayPersonInfo(person){
+    let personInfo = `Name: ${person.firstName} ${person.lastName}\nGender: ${person.gender}\nDate of Birth: ${person.dob}\nHeight: ${person.height}\nWeight: ${person.weight}\nEye Color: ${person.eyeColor}\nOccupation: ${person.occupation}`
+    alert(personInfo)
 }
 
 function displayPeople(displayTitle, peopleToDisplay) {
