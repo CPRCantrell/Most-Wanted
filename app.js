@@ -47,7 +47,6 @@ function searchPeopleDataSet(people) {
         default:
             return searchPeopleDataSet(people);
     }
-
     return results;
 }
 
