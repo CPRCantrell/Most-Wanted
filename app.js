@@ -40,8 +40,8 @@ function searchPeopleDataSet(people) {
             results = searchByName(people);
             break;
         case 'traits':
-            //! TODO
-            // results = searchByTraits(people);
+            debugger
+            results = searchByTraits(people);
             break;
         default:
             return searchPeopleDataSet(people);
@@ -64,6 +64,31 @@ function searchByName(people) {
     return fullNameSearchResults;
 }
 
+function searchByTraits(people){
+    let acceptableAnswers=["gender","date of birth","height","weight","eyeColor","occupation"]
+    let userAns=validatedPrompt("What trait do you want to filter by?",acceptableAnswers)
+    switch(userAns){
+        case "eyecolor":
+            userAns="eyeColor"
+            break
+        case "date of birth":
+            userAns="dob"
+            break
+        default:
+            break
+    }
+    let options=people.map(person=>person[userAns])
+    let emptyArray=[]
+    options=options.filter(op=>{
+        if(!emptyArray.includes(op)){
+            emptyArray.push(op)
+            return true
+        }
+    })
+    let userSelect=validatedPrompt("What filter do you want?",options)
+    let ans=people.filter(person=>person[userAns]==userSelect)
+    return ans
+}
 function mainMenu(person, people) {
 
     const mainMenuUserActionChoice = validatedPrompt(
@@ -79,6 +104,7 @@ function mainMenu(person, people) {
             displayPeople('Family', findPersonFamily(person, people));
             break;
         case "descendants":
+            debugger
             displayPeople('Descendants', findPersonDescendants(person, people));
             break;
         case "quit":
