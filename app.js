@@ -221,5 +221,4 @@ function exitOrRestart(people) {
             alert('Invalid input. Please try again.');
             return exitOrRestart(people);
     }
-
 }
