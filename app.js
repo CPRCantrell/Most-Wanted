@@ -172,7 +172,7 @@ function findPersonDescendants(searchedPerson, people){
 
 function displayPeople(displayTitle, peopleToDisplay) {
     let formatedPeopleDisplayText
-    if(peopleToDisplay == []){
+    if(peopleToDisplay.length == 0){
         formatedPeopleDisplayText = "None"
     }
     else if(peopleToDisplay[0].hasOwnProperty("relationship")){
