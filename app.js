@@ -13,7 +13,7 @@ function runSearchAndMenu(people) {
     const searchResults = searchPeopleDataSet(people);
 
     if (searchResults.length > 1) {
-        DisplayPeople('Search Results', searchResults);
+        displayPeople('Search Results', searchResults);
     }
     else if (searchResults.length === 1) {
         const person = searchResults[0];
