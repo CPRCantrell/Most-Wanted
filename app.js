@@ -122,31 +122,53 @@ function displayPersonInfo(person){
     alert(personInfo)
 }
 
+function findSpouse(person, people){
+    let spouse = people.filter(p => person.currentSpouse == p.id).map(p =>{
+        return {"firstName": p.firstName, "lastName": p.lastName, "relationship": "Spouse"}
+    })
+    return spouse
+}
+
+function findSibling(person,people){
+    let siblings = people.filter(p =>(p.id != person.id && (person.parents.length > 0 ? p.parents.includes(person.parents[0]) : false ) || (person.parents.length > 1 ? p.parents.includes(person.parents[1]) : false)))
+    if(siblings.length > 0){
+        siblings.map(p => {
+            return {"firstName": p.firstName, "lastName": p.lastName, "relationship": "Sibling"}
+        })
+    }
+    return siblings
+}
 
 function findPersonFamily(searchedPerson, people){
-    let family=people.filter(person=>{
-        if(searchedPerson.currentSpouse==person.id){
-            person.relationship = "Spouse"
-            return true
-        }
-        else if(person.parents.includes(searchedPerson.id)){
-            person.relationship = "Child"
-            return true
-        }
-        else if(searchedPerson.parents.includes(person.id)){
-            person.relationship = "Parent"
-            return true
-        } else if(searchedPerson.parents.length>0){
-            for(let parent in searchedPerson.parents){
-                for(let matchParent in person.parents){
-                    if(searchedPerson.parents[parent] == person.parents[matchParent] && searchedPerson.id != person.id){
-                        person.relationship = "siblings"
-                        return true
-                    }
-                }
-            }
-        }
-    })
+    let family = []
+    family = family.concat(searchedPerson.currentSpouse != null ? findSpouse(searchedPerson, people) : false)
+    family = family.concat(findSibling(searchedPerson, people))
+
+    // let family=people.filter(person=>{
+    //     if(searchedPerson.currentSpouse==person.id){
+    //         person.relationship = "Spouse"
+    //         return true
+    //     }
+    //     else if(person.parents.includes(searchedPerson.id)){
+    //         person.relationship = "Child"
+    //         return true
+    //     }
+    //     else if(searchedPerson.parents.includes(person.id)){
+    //         person.relationship = "Parent"
+    //         return true
+    //     }
+    //     //else if(searchedPerson.parents.length>0){
+    //     //     // for(let parent in searchedPerson.parents){
+    //     //     //     for(let matchParent in person.parents){
+    //     //     //         if(searchedPerson.parents[parent] == person.parents[matchParent] && searchedPerson.id != person.id){
+    //     //     //             person.relationship = "Sibling"
+    //     //     //             return true
+    //     //     //         }
+    //     //     //     }
+    //     //     // }
+
+    //     // }
+    // }
     return family
 }
 
