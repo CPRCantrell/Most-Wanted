@@ -69,9 +69,11 @@ function searchByTraits(people, acceptableAnswers){
 
     if(userAns == "done"){
         return people
-    }else if(userAns == "restart"){
+    }
+    else if(userAns == "restart"){
         return searchByTraits(peopleList,["gender","date of birth","height","weight","eyeColor","occupation", "done", "restart"])
-    }else{
+    }
+    else{
         switch(userAns){
             case "eyecolor":
                 userAns="eyeColor"
@@ -124,9 +126,7 @@ function displayPersonInfo(person){
 }
 
 function findSpouse(person, people){
-    let spouse = people.filter(p => person.currentSpouse == p.id).map(p =>{
-        return {"firstName": p.firstName, "lastName": p.lastName, "relationship": "Spouse"}
-    })
+    let spouse = people.filter(p => person.currentSpouse == p.id).map(p =>{return {"firstName": p.firstName, "lastName": p.lastName, "relationship": "Spouse"}})
     return spouse
 }
 
@@ -136,22 +136,21 @@ function findChild(person,people){
 }
 
 function findSibling(person,people){
-    let siblings = people.filter(p =>(p.id != person.id &&( (person.parents.length > 0 ? p.parents.includes(person.parents[0]) : false ) || (person.parents.length > 1 ? p.parents.includes(person.parents[1]) : false)))).map(p=>{
+    let siblings = people.filter(p =>(p.id != person.id && (person.parents.length > 0 ? p.parents.includes(person.parents[0]) : false || person.parents.length > 1 ? p.parents.includes(person.parents[1]) : false))).map(p=>{
         return {"firstName": p.firstName, "lastName": p.lastName, "relationship": "Sibling"}
     })
     return siblings
 }
 
 function findParent(person, people){
-    let parent = people.filter(p => person.parents.includes(p.id)).map(p =>{
-        return {"firstName": p.firstName, "lastName": p.lastName, "relationship": "Parent"}
-    })
+    let parent = people.filter(p => person.parents.includes(p.id)).map(p =>{return {"firstName": p.firstName, "lastName": p.lastName, "relationship": "Parent"}})
     return parent
 }
 
 function findPersonFamily(searchedPerson, people){
     let family = []
-    family = family.concat(searchedPerson.parents.length >0 ? findParent(searchedPerson, people) : [])
+
+    family = family.concat(searchedPerson.parents.length > 0 ? findParent(searchedPerson, people) : [])
     family = family.concat(findChild(searchedPerson,people))
     family = family.concat(searchedPerson.currentSpouse != null ? findSpouse(searchedPerson, people) : [])
     family = family.concat(findSibling(searchedPerson, people))
@@ -185,7 +184,8 @@ function displayPeople(displayTitle, peopleToDisplay) {
     }
     else if(peopleToDisplay[0].hasOwnProperty("relationship")){
         formatedPeopleDisplayText = peopleToDisplay.map(person => `${person.relationship}: ${person.firstName} ${person.lastName}`).join('\n');
-    }else{
+    }
+    else{
         formatedPeopleDisplayText = peopleToDisplay.map(person => `${person.firstName} ${person.lastName}`).join('\n');
     }
     alert(`${displayTitle}\n\n${formatedPeopleDisplayText}`);
@@ -195,7 +195,8 @@ function validatedPrompt(message, acceptableAnswers) {
     acceptableAnswers = acceptableAnswers.map(aa => {
         if(typeof aa == "string"){
             return aa.toLowerCase()
-        }else{
+        }
+        else{
             return aa
         }
     });
@@ -208,7 +209,7 @@ function validatedPrompt(message, acceptableAnswers) {
     if (selectedAnswer.length == 1) {
         return selectedAnswer[0];
     }
-    else {
+    else{
         alert(`"${userResponse}" is not an acceptable response. The acceptable responses include:\n${acceptableAnswers.map(aa => `\n-> ${aa}`).join('')} \n\nPlease try again.`);
         return validatedPrompt(message, acceptableAnswers);
     }
